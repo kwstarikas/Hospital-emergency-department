@@ -1,0 +1,1 @@
+CREATE TABLE `HospitalEmergencyDepartment`.`Shift` ( `Shift_ID` INT NOT NULL AUTO_INCREMENT , `Date` DATE NOT NULL , `Adminstrative stuff No.` INT NOT NULL , `Doctor No.` INT NOT NULL , `Nurse No.` INT NOT NULL , `PID` INT NOT NULL , PRIMARY KEY (`Shift_ID`), UNIQUE `shift_date` (`Date`)) ENGINE = InnoDB;

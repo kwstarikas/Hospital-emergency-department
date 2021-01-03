@@ -1,0 +1,1 @@
+CREATE TABLE `HospitalEmergencyDepartment`.`Diagnosis` ( `Diagnosis_ID` INT NOT NULL AUTO_INCREMENT , PRIMARY KEY (`Diagnosis_ID`)) ENGINE = InnoDB;

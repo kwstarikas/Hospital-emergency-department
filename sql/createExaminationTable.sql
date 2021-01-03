@@ -1,0 +1,1 @@
+CREATE TABLE `HospitalEmergencyDepartment`.`Examination` ( `Examination_ID` INT NOT NULL AUTO_INCREMENT , `Date` DATE NOT NULL , `type` VARCHAR(50) NOT NULL , `PID` INT NOT NULL , PRIMARY KEY (`Examination_ID`), UNIQUE `examination_date` (`Date`)) ENGINE = InnoDB;
