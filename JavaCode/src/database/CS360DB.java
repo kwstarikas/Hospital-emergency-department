@@ -9,7 +9,6 @@ public class CS360DB {
     private static final String username = new String("root");
     private static final String password = new String("");
 
-
     /**
      *
      * @return connection to the database
@@ -18,9 +17,9 @@ public class CS360DB {
      */
     public static Connection getConnection() throws SQLException, ClassNotFoundException{
         Class.forName("com.mysql.cj.jdbc.Driver");
+        System.out.println("connection is on");
         return DriverManager.getConnection(
                 url + ":" + port + "/" + databaseName + "?characterEncoding=UTF-8", username, password);
     }
-
 
 }
