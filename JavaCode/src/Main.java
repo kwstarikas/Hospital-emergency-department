@@ -7,14 +7,6 @@ public class Main {
         
         System.out.println("KAISER");
 
-        try {
 
-            //AddPeople.addDoctor();
-
-            AddPeople.addPatient(111111);
-          // AddPeople.addSymptoms(421313124, "Bixas");
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        }
     }
 }
