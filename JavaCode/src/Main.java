@@ -9,7 +9,10 @@ public class Main {
 
         try {
 
-            AddPeople.addDoctor();
+            //AddPeople.addDoctor();
+
+            AddPeople.addPatient(111111);
+          // AddPeople.addSymptoms(421313124, "Bixas");
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
