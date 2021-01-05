@@ -1,3 +1,3 @@
-CREATE TABLE `HospitalEmergencyDepartment`.`Symptoms` 
-( `AMKA` INT NOT NULL , `Symptoms` TEXT NOT NULL )
+CREATE TABLE `HospitalEmergencyDepartment`.`Symptoms`
+( `Symptom` VARCHAR(50) NOT NULL , `AMKA` INT NOT NULL )
  ENGINE = InnoDB;

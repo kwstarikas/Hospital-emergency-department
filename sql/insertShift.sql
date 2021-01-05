@@ -1,0 +1,1 @@
+INSERT INTO `Shift` (`Shift_ID`, `Date`, `Adminstrative stuff No.`, `Doctor No.`, `Nurse No.`, `PID`) VALUES (NULL, '2021-01-14', '13', '14', '22', '2'), (NULL, '2021-01-17', '2', '2', '4', '3'), (NULL, '2021-01-21', '23', '4', '1', '1');
