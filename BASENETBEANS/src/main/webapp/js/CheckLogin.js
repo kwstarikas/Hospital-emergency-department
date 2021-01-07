@@ -9,7 +9,7 @@ function testRedirection() {
     console.log("Entered testRedirection");
     console.log("AMKA =", amka);
     if (amka === "123123") {
-        window.location.replace("pages/patient.html");
+        window.location = "pages/patient.html";
     }
 }
 
