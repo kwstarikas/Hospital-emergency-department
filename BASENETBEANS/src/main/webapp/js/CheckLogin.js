@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 
+function testRedirection() {
+    amka = document.getElementById("amka_input").value;
+    console.log("Entered testRedirection");
+    console.log("AMKA =", amka);
+    if (amka === "123123") {
+        window.location.replace("pages/patient.html");
+    }
+}
 
 function checkPatientLogin() {
     console.log("in Check Login");
@@ -20,95 +28,20 @@ function checkPatientLogin() {
         success: function(data) {
             if (data.Exists) {
                 console.log(data);
-                var userList = '<ul class=\"list-group\">' +
-                    '<li class=\"list-group-item\"> ' + '<br>AMKA : ' + data.AMKA +
-                    '<br>First Name : ' + data.First_Name +
-                    ' <br>Last NAME : ' + data.Last_Name +
-                    ' <br>Address : ' + data.Address +
-                    ' <br>Insurance : ' + data.Insurance +
-                    ' <br>Phone : ' + data.Phone +
-                    ' <br>Giatros : ' + data.PID +
-                    '</li>' +
-                    '</ul> ';
-                document.getElementById("ShowPatientINFO").innerHTML = userList;
-                document.getElementById("ShowPersonnelINFO").style.display = "none";
-
-                if (data.Has_Prev_visit) {
-                    var userPreVisit = '<ul class=\"list-group\">' +
-                        '<li class=\"list-group-item\"> ' + '<br>Date : ' + data.Date +
-                        '<br>ExaminationID : ' + data.ExaminationID +
-                        ' <br>Diagnosis : ' + data.Diagnosis +
-                        ' <br>Examination : ' + data.Examination +
-                        ' <br>Cure : ' + data.Cure +
-                        '</li>' +
-                        '</ul> ';
-                    document.getElementById("ShowPatientsPrevVisits").innerHTML = userPreVisit;
-                }
+                //window.location.replace("pages/patient.html");
+                if (data.Has_Prev_visit) {}
             } else {
-                console.log("SAdasd");
-                document.getElementById("ShowInvalidLogin").innerHTML = 'Invalid Amka';
+                console.log("Patient Not Found");
+                document.getElementById("ShowInvalidLogin").innerHTML = 'Invalid AMKA';
                 document.getElementById("ShowInvalidLogin").style.color = 'red';
             }
 
         },
         error: {
             400: function(data) {
-                console.log("Error invalid AMka");
+                console.log("Error invalid AMKA");
             }
         }
     });
 
 }
-
-
-
-
-
-
-
-// console.log("in Check Login");
-//     var data = {
-//         amka: $("#amka_input").val()
-//     };
-
-//     console.log(data.amka);
-//     $.ajax({
-//         type: "POST",
-//         url: "LoginPatientServlet",
-//         data: data,
-//         async: true,
-//         success: function(data) {
-//             console.log("MPIKA SUCCERS");
-
-//             $("#loginContainer").html(data);
-
-//         },
-//         error: {
-//             400: function(data) {
-//                 console.log("Error invalid AMka");
-//             }
-//         }
-//     });
-
-
-
-
-
-
-
-// var amka = document.getElementById("amka_input").value;
-
-
-//     var xhr = new XMLHttpRequest();
-//     xhr.onload = function() {
-//         if (this.readyState === 4 && this.status === 200) {
-//             console.log("SUCCESS");
-//             var myObj = JSON.parse(this.responseText);
-//             console.log(myObj);
-//         }
-//     };
-
-
-//     xhr.open('POST', 'LoginPatientServlet');
-//     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-//     xhr.send('amka=' + amka);
