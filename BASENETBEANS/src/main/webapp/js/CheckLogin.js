@@ -9,8 +9,13 @@ function testRedirection() {
     console.log("Entered testRedirection");
     console.log("AMKA =", amka);
     if (amka === "123123") {
-        window.location = "pages/patient.html";
+        window.location = "pages/patient.html"; 
     }
+}
+
+function fillPatientInfo(){
+    console.log("Entered fillPatientInfo()");
+    document.getElementById("name").innerHTML = "loukas";
 }
 
 function checkPatientLogin() {
