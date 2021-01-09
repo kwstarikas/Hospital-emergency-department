@@ -6,11 +6,11 @@
 package servlets;
 
 import com.google.gson.Gson;
+import db.AddPeople;
 import db.CS360DB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -21,13 +21,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Patient;
 
 /**
  *
  * @author loukas
  */
-public class LoginPatientServlet extends HttpServlet {
+public class AddSymptomServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,66 +41,36 @@ public class LoginPatientServlet extends HttpServlet {
             throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            System.out.println("IN ADD SYMPTOM SERVLET");
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
             boolean correct = false; //if the patient exists
+
             Connection con = CS360DB.getConnection();
             Statement stmt = con.createStatement();
+
+            String symptom = request.getParameter("symptom");
             String info = request.getParameter("amka");
             int amka = Integer.parseInt(info);
 
-            System.out.println("ENTER THE SERVLET");
+            String insQuery = new String("INSERT INTO `Symptoms` "
+                    + "(`AMKA`, `Symptoms`) "
+                    + "VALUES ('" + amka + "', '" + symptom + "')");
 
-            String insQuery = new String("SELECT * FROM `Patient` WHERE `AMKA` = " + amka);
-            ResultSet rs = stmt.executeQuery(insQuery);
-            Patient patient;
-            patient = new Patient();
+            stmt.executeUpdate(insQuery);
+
+            con.close();
             Map map = new HashMap();
-            if (rs.next()) {
-                System.out.println("Found him");
-                map.put("Exists", true);
-                map.put("AMKA", rs.getInt("AMKA"));
-                map.put("First_Name", rs.getString("First_Name"));
-                map.put("Last_Name", rs.getString("Last_Name"));
-                map.put("Address", rs.getString("Address"));
-                map.put("Insurance", rs.getString("Insurance"));
-                map.put("Phone", rs.getString("Phone"));
-                map.put("PID", rs.getInt("PID"));
 
-            } else {
-                map.put("Exists", false);
-            }
+            map.put("DOC", AddPeople.addSymptoms(amka, symptom));
 
-            insQuery = new String("SELECT * FROM `Previous visit` WHERE `AMKA` = " + amka);
-            rs = stmt.executeQuery(insQuery);
 
-            if (rs.next()) {
-                map.put("Has_Prev_visit", true);
-                map.put("AMKA", rs.getInt("AMKA"));
-                map.put("ExaminationID", rs.getString("ExaminationID"));
-                map.put("Date", rs.getString("Date"));
-                map.put("Diagnosis", rs.getString("Diagnosis"));
-                map.put("Examination", rs.getString("Examination"));
-                map.put("Cure", rs.getString("Cure"));
-            } else {
-                map.put("Has_Prev_visit", false);
-            }
-
-            insQuery = new String("SELECT * FROM `ChronicCondition` WHERE `AMKA` = " + amka);
-            rs = stmt.executeQuery(insQuery);
-            if (rs.next()) {
-                map.put("ChronicDisease", rs.getString("Name"));
-                map.put("DiagnosisDate", rs.getString("Diagnosis_date"));
-            }
-            else
-                map.put("ChronicDisease", false);
             Gson gson = new Gson();
             String json = gson.toJson(map);
             response.getWriter().write(json);
-            con.close();
+
         }
     }
 
@@ -120,9 +89,9 @@ public class LoginPatientServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -140,9 +109,9 @@ public class LoginPatientServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

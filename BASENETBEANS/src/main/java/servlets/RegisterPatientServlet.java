@@ -7,10 +7,10 @@ package servlets;
 
 import com.google.gson.Gson;
 import db.CS360DB;
+import db.PatientDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -21,13 +21,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Patient;
 
 /**
  *
  * @author loukas
  */
-public class LoginPatientServlet extends HttpServlet {
+public class RegisterPatientServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,66 +41,61 @@ public class LoginPatientServlet extends HttpServlet {
             throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            System.out.println("IN ADD PATIENT REGISTER SERVLET");
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
-            boolean correct = false; //if the patient exists
-            Connection con = CS360DB.getConnection();
-            Statement stmt = con.createStatement();
-            String info = request.getParameter("amka");
+            Statement stmt = null;
+            Connection con = null;
+
+            String name = request.getParameter("Name");
+            String info = request.getParameter("AMKA");
             int amka = Integer.parseInt(info);
+            String surnname = request.getParameter("Surname");
+            String address = request.getParameter("Address");
+            String insurance = request.getParameter("Insurance");
+            String phone = request.getParameter("Phone");
+            String chronicDisease = request.getParameter("CronicDiseases");
+            String chronicDate = request.getParameter("ChronicDiseaseDate");
 
-            System.out.println("ENTER THE SERVLET");
-
-            String insQuery = new String("SELECT * FROM `Patient` WHERE `AMKA` = " + amka);
-            ResultSet rs = stmt.executeQuery(insQuery);
-            Patient patient;
-            patient = new Patient();
             Map map = new HashMap();
-            if (rs.next()) {
-                System.out.println("Found him");
-                map.put("Exists", true);
-                map.put("AMKA", rs.getInt("AMKA"));
-                map.put("First_Name", rs.getString("First_Name"));
-                map.put("Last_Name", rs.getString("Last_Name"));
-                map.put("Address", rs.getString("Address"));
-                map.put("Insurance", rs.getString("Insurance"));
-                map.put("Phone", rs.getString("Phone"));
-                map.put("PID", rs.getInt("PID"));
 
-            } else {
-                map.put("Exists", false);
-            }
+            map.put("First_Name", name);
+            map.put("Last_Name", surnname);
+            map.put("Address", address);
+            map.put("AMKA", amka);
+            map.put("Phone", phone);
+            map.put("Insurance", insurance);
+            map.put("PID", 0);
+            map.put("Chronic", chronicDisease);
+            map.put("ChronicDate", chronicDate);
+            map.put("PID", 0);
 
-            insQuery = new String("SELECT * FROM `Previous visit` WHERE `AMKA` = " + amka);
-            rs = stmt.executeQuery(insQuery);
+            System.out.println(name);
+            System.out.println(amka);
+            System.out.println(surnname);
+            System.out.println(address);
+            System.out.println(insurance);
+            System.out.println(phone);
+            System.out.println(chronicDisease);
 
-            if (rs.next()) {
-                map.put("Has_Prev_visit", true);
-                map.put("AMKA", rs.getInt("AMKA"));
-                map.put("ExaminationID", rs.getString("ExaminationID"));
-                map.put("Date", rs.getString("Date"));
-                map.put("Diagnosis", rs.getString("Diagnosis"));
-                map.put("Examination", rs.getString("Examination"));
-                map.put("Cure", rs.getString("Cure"));
-            } else {
-                map.put("Has_Prev_visit", false);
-            }
+            PatientDB.addPatient(amka, name, surnname, address,
+                    insurance, phone, 0);
 
-            insQuery = new String("SELECT * FROM `ChronicCondition` WHERE `AMKA` = " + amka);
-            rs = stmt.executeQuery(insQuery);
-            if (rs.next()) {
-                map.put("ChronicDisease", rs.getString("Name"));
-                map.put("DiagnosisDate", rs.getString("Diagnosis_date"));
-            }
-            else
-                map.put("ChronicDisease", false);
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
+
+            String insQuery = new String("INSERT INTO `ChronicCondition` "
+                    + "(`AMKA`, `Diagnosis_date`, `Name`) "
+                    + "VALUES ('" + amka + "', '" + chronicDate + "', '" + chronicDisease + "')");
+
+            stmt.executeUpdate(insQuery);
+            con.close();
+
             Gson gson = new Gson();
             String json = gson.toJson(map);
             response.getWriter().write(json);
-            con.close();
         }
     }
 
@@ -120,9 +114,9 @@ public class LoginPatientServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -140,9 +134,9 @@ public class LoginPatientServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

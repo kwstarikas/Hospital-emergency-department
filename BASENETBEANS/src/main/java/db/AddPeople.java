@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import model.PIDClass;
 
 /**
  *
@@ -43,6 +44,7 @@ public class AddPeople {
                 + Phone + "', '" + Sex + "', '" + Specialization + "');");
 
         stmt.executeUpdate(insQuery);
+        System.out.println("Doctor + '" + name + "' ADDED");
         con.close();
     }
 
@@ -73,6 +75,7 @@ public class AddPeople {
                 + Phone + "', '" + Sex + "', '" + Years_of_service + "');");
 
         stmt.executeUpdate(insQuery);
+        System.out.println("Administrative staff + '" + name + "' ADDED");
         con.close();
 
     }
@@ -105,33 +108,8 @@ public class AddPeople {
                 + Phone + "', '" + Sex + "', '" + Expertise + "');");
 
         stmt.executeUpdate(insQuery);
+        System.out.println("Nurse + '" + name + "' ADDED");
         con.close();
-    }
-
-    /**
-     *
-     * @param amka
-     * @param name
-     * @param Last_name
-     * @param Address
-     * @param Insurance
-     * @param Phone
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    public static void addPatient(int amka, String name, String Last_name, String Address, String Insurance, String Phone) throws ClassNotFoundException, SQLException {
-        Statement stmt = null;
-        Connection con = null;
-        con = CS360DB.getConnection();
-        stmt = con.createStatement();
-
-        int PID = addSymptoms(amka, "ponos");
-
-        String insQuery = new String("INSERT INTO `Patient` (`AMKA`, `First_Name`, `Last_Name`, `Address`,"
-                + " `Insurance`, `Phone`, `PID`) VALUES ('" + amka + "', 'ANDRONIKO', 'NIKOLO', 'IOANNINA', 'Agrotiki', '6984', '" + PID + "');");
-        System.out.println("DONE");
-        stmt.executeUpdate(insQuery);
-
     }
 
     /**
@@ -152,9 +130,13 @@ public class AddPeople {
 
         /*
         * Exoume sinolo 5 astheneies gia 5 eidikotites
-        * Bixas, kourasi, kardia , xtipima, ponokefalos
+        *   Abdominal pain -> pathologos
+            Wound          -> Arthologos
+            Headache       -> kardiologos
+            Stomachache    -> pneumatologos
+            Weariness      -> covid
         * */
-        if (symptom.equals("Bixas")) {
+        if (symptom.equals("Abdominal pain ")) {
             String searchdoc = new String("SELECT PID FROM `Doctor` WHERE `Specialization` LIKE 'pathologos'");
 
             ResultSet rs = stmt.executeQuery(searchdoc);
@@ -162,7 +144,7 @@ public class AddPeople {
             while (rs.next()) {
                 PID = rs.getInt("PID");
             }
-        } else if (symptom.equals("Kourasi")) {
+        } else if (symptom.equals("Stomachache")) {
             String searchdoc = new String("SELECT PID FROM `Doctor` WHERE `Specialization` LIKE 'pneumatologos'");
 
             ResultSet rs = stmt.executeQuery(searchdoc);
@@ -170,7 +152,7 @@ public class AddPeople {
             while (rs.next()) {
                 PID = rs.getInt("PID");
             }
-        } else if (symptom.equals("kardia")) {
+        } else if (symptom.equals("Headache")) {
             String searchdoc = new String("SELECT PID FROM `Doctor` WHERE `Specialization` LIKE 'kardiologos'");
 
             ResultSet rs = stmt.executeQuery(searchdoc);
@@ -178,7 +160,7 @@ public class AddPeople {
             while (rs.next()) {
                 PID = rs.getInt("PID");
             }
-        } else if (symptom.equals("xtipima")) {
+        } else if (symptom.equals("Wound")) {
             String searchdoc = new String("SELECT PID FROM `Doctor` WHERE `Specialization` LIKE 'Arthrologos'");
 
             ResultSet rs = stmt.executeQuery(searchdoc);
@@ -186,8 +168,8 @@ public class AddPeople {
             while (rs.next()) {
                 PID = rs.getInt("PID");
             }
-        } else if (symptom.equals("ponokefalos")) {
-            String searchdoc = new String("SELECT PID FROM `Doctor` WHERE `Specialization` LIKE 'se kati '");
+        } else if (symptom.equals("Weariness")) {
+            String searchdoc = new String("SELECT PID FROM `Doctor` WHERE `Specialization` LIKE 'covid'");
 
             ResultSet rs = stmt.executeQuery(searchdoc);
 
@@ -202,7 +184,16 @@ public class AddPeople {
                 + "','" + symptom + "');");
 
         stmt.executeUpdate(insQuery);
+        con.close();
         return PID;
+    }
+
+    public static PIDClass returnStuff() {
+
+        PIDClass person = null;
+
+        return person;
+
     }
 
     public static void addPreviousVisit(int amka, int Examination_ID, String Date, String Diagnosis, String Examination, String Cure)

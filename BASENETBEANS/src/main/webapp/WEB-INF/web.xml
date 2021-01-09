@@ -8,6 +8,26 @@
         <servlet-name>LoginPersonnelServlet</servlet-name>
         <servlet-class>servlets.LoginPersonnelServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddSymptomServlet</servlet-name>
+        <servlet-class>servlets.AddSymptomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegisterPatientServlet</servlet-name>
+        <servlet-class>servlets.RegisterPatientServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginPersonnelServlet2</servlet-name>
+        <servlet-class>servlets.LoginPersonnelServlet2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegisterPersonnelServlet</servlet-name>
+        <servlet-class>servlets.RegisterPersonnelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getExaminedServlet</servlet-name>
+        <servlet-class>servlets.getExaminedServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginPatientServlet</servlet-name>
         <url-pattern>/LoginPatientServlet</url-pattern>
@@ -15,6 +35,26 @@
     <servlet-mapping>
         <servlet-name>LoginPersonnelServlet</servlet-name>
         <url-pattern>/LoginPersonnelServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddSymptomServlet</servlet-name>
+        <url-pattern>/AddSymptomServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterPatientServlet</servlet-name>
+        <url-pattern>/RegisterPatientServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginPersonnelServlet2</servlet-name>
+        <url-pattern>/LoginPersonnelServlet2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterPersonnelServlet</servlet-name>
+        <url-pattern>/RegisterPersonnelServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getExaminedServlet</servlet-name>
+        <url-pattern>/getExaminedServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
