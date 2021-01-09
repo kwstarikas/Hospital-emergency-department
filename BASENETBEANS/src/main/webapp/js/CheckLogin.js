@@ -5,14 +5,7 @@
  */
 
 
-function testRedirection() {
-    amka = document.getElementById("amka_input").value;
-    console.log("Entered testRedirection");
-    console.log("AMKA =", amka);
-    if (amka === "123123") {
-        document.getElementById("amka").innerHTML = 'kalispera';
-    }
-}
+
 
 function checkPatientLogin() {
     console.log("in Check Login");
@@ -31,8 +24,8 @@ function checkPatientLogin() {
                 
                 document.getElementById("AddPatientSympom").style.display = "block";
                 document.getElementById("PatientInfoCard").style.display = "block";
-                document.getElementById("PatientInfoLogin").style.display = "none";
                 
+                document.getElementById("PatientInfoLogin").style.display = "none";
                 document.getElementById("ShowPersonnelINFO").style.display = "none";
                 
                 document.getElementById("Patientname").innerHTML = data.First_Name;
@@ -41,6 +34,7 @@ function checkPatientLogin() {
                 document.getElementById("Patientinsurance").innerHTML = data.Insurance;
                 document.getElementById("Patientamka").innerHTML = data.AMKA;
                 document.getElementById("Patientcellphone").innerHTML = data.Phone;
+                document.getElementById("DoctorToSee").innerHTML = '-';
                 
                 if (data.ChronicDisease != false){
                      document.getElementById("PatientchronicDisease").innerHTML = data.ChronicDisease;

@@ -5,10 +5,16 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
+import db.CS360DB;
 import db.PatientDB;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -35,9 +41,13 @@ public class RegisterPatientServlet extends HttpServlet {
             throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            System.out.println("IN ADD SYMPTOM SERVLET");
+            System.out.println("IN ADD PATIENT REGISTER SERVLET");
+
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+
+            Statement stmt = null;
+            Connection con = null;
 
             String name = request.getParameter("Name");
             String info = request.getParameter("AMKA");
@@ -47,6 +57,20 @@ public class RegisterPatientServlet extends HttpServlet {
             String insurance = request.getParameter("Insurance");
             String phone = request.getParameter("Phone");
             String chronicDisease = request.getParameter("CronicDiseases");
+            String chronicDate = request.getParameter("ChronicDiseaseDate");
+
+            Map map = new HashMap();
+
+            map.put("First_Name", name);
+            map.put("Last_Name", surnname);
+            map.put("Address", address);
+            map.put("AMKA", amka);
+            map.put("Phone", phone);
+            map.put("Insurance", insurance);
+            map.put("PID", 0);
+            map.put("Chronic", chronicDisease);
+            map.put("ChronicDate", chronicDate);
+            map.put("PID", 0);
 
             System.out.println(name);
             System.out.println(amka);
@@ -57,8 +81,21 @@ public class RegisterPatientServlet extends HttpServlet {
             System.out.println(chronicDisease);
 
             PatientDB.addPatient(amka, name, surnname, address,
-                    insurance, phone, amka);
+                    insurance, phone, 0);
 
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
+
+            String insQuery = new String("INSERT INTO `ChronicCondition` "
+                    + "(`AMKA`, `Diagnosis_date`, `Name`) "
+                    + "VALUES ('" + amka + "', '" + chronicDate + "', '" + chronicDisease + "')");
+
+            stmt.executeUpdate(insQuery);
+            con.close();
+
+            Gson gson = new Gson();
+            String json = gson.toJson(map);
+            response.getWriter().write(json);
         }
     }
 

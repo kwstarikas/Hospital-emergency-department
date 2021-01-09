@@ -10,8 +10,7 @@ function addSymptom(){
         symptom: $("#patientSymptom").val(),
         amka : $('#amka_input').val()
     };
-    console.log(data.symptom); 
-    console.log(data.amka);
+    
     $.ajax({
         type: "POST",
         url: "AddSymptomServlet",
@@ -19,7 +18,8 @@ function addSymptom(){
         async: true,
         success: function(data) {
             console.log("Symptom added");
-                
+            document.getElementById("DoctorToSee").innerHTML = data.DOC;
+            document.getElementById("ShowExaminationButton").style.display = "block";
                
         },
         error: {

@@ -49,13 +49,19 @@
                             <label for="amka_input">PID</label>
                         </div>
                         <button type="button" onclick="PersonnelLogin();" class="btn btn-success">Enter</button>
-                        <button type="button" class="btn btn-primary">Register</button>
+                         <button id="btnGroupDrop1" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#doctorModal">
+                            Register
+                          </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
+    
+    
+    
+   
     <!-- Patient info-->
    <div class="card" id="PatientInfoCard">
                     <div class="card-header">
@@ -74,6 +80,7 @@
                                     <li class="list-group-item list-group-item-primary">Tel Number</li>
                                     <li class="list-group-item list-group-item-primary">Chronic Diseases</li>
                                     <li class="list-group-item list-group-item-primary">Chronic Disease DD</li>
+                                    <li class="list-group-item list-group-item-primary">Doctor to see</li>
                                   </ul>
                             </div>
                             <div class="col" id="DisplayPatientINFO">
@@ -86,6 +93,7 @@
                                   <li class="list-group-item" id="Patientcellphone"></li>
                                   <li class="list-group-item" id="PatientchronicDisease"></li>
                                   <li class="list-group-item" id="PatientchronicDiseaseDD"></li>
+                                  <li class="list-group-item" id="DoctorToSee"></li>
                                 </ul>
                                 
                             </div>
@@ -106,7 +114,6 @@
                                     <li class="list-group-item list-group-item-primary">Surname</li>
                                     <li class="list-group-item list-group-item-primary">Address</li>
                                     <li class="list-group-item list-group-item-primary">Birthdate</li>
-                                    <li class="list-group-item list-group-item-primary">PID</li>
                                     <li class="list-group-item list-group-item-primary">Tel Number</li>
                                     <li class="list-group-item list-group-item-primary">Sex</li>
                                     <li class="list-group-item list-group-item-primary" id="ExtraInfo" ></li>
@@ -118,7 +125,7 @@
                                   <li class="list-group-item" id="Personnelsurname"></li>
                                   <li class="list-group-item" id="PersonnelAddress"></li>
                                   <li class="list-group-item" id="PersonnelBirthDate"></li>
-                                  <li class="list-group-item" id="PersonnelPID"></li>
+                                  
                                   <li class="list-group-item" id="Personnelcellphone"></li>
                                   <li class="list-group-item" id="PersonelSex"></li>
                                   <li class="list-group-item" id="PersonnelExtraInfo"></li>
@@ -161,8 +168,9 @@
                         </div>
                     </div>  
                 </div>
-    <!-- Add Sympom Button -->
+   
     
+    <!-- Add Sympom Button -->
     <div class="col-md-6" id="AddPatientSympom">
                 <label for="symptoms" class="form-label">Symptoms</label>
                 <select id="patientSymptom" class="form-select">
@@ -175,7 +183,10 @@
                 </select>
                 <button type="button" class="btn btn-success" onclick="addSymptom();">Submit</button>
               </div>
-    
+    <div >
+        <button id="ShowExaminationButton" style="display: none"  type="button" onclick="getExamined();" class="btn btn-success" >EXAMINE ME</button>
+        
+    </div>
     <!-- patiert Modal -->
     <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -210,33 +221,211 @@
                 <label for="chronicdiseases" class="form-label">Chronic Diseases</label>
                 <input type="text" class="form-control" id="chronicdiseases">
               </div>
+                <div class="col-6">
+                <label for="ChronicDiseaseDate" class="form-label">Chronic Disease Date</label>
+                <input type="date" class="form-control" id="ChronicDiseaseDate">
+              </div>
               <div class="col-md-6">
                 <label for="patientCellphone" class="form-label">Cellphone Number</label>
                 <input type="text" class="form-control" id="patientCellphone">
               </div>
-<!--              <div class="col-md-6">
-                <h5>Chronic Diseases</h5>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Cancer
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Diabetes
-                  </label>
-                </div>
-              </div>-->
               <div class="col-12">
-                <button type="submit" class="btn btn-primary" onclick="registerPatient();">Register Patient</button>
+                <button type="button" class="btn btn-success" onclick="registerPatient();">Register Patient</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
+    
+    
+    
+     
+    <!-- Create shift-->
+    
+    <div class="container" id="ShowShiftCard" style="display: none">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card mt-5" id="ShiftCreateAdmin">
+                    <div class="card-header">
+                        Create Shift
+                    </div>
+                    <div class="card-body" id="ShowPatientINFO">
+                        <div class="col-12 mb-3">
+                            
+                            <label for="ShiftDocNum">Doctors Number</label>
+                            <input type="text" class="form-control" id="ShiftDocNum" placeholder="Doctor Number">
+                        </div>                
+                            <div class="col-12 mb-3">
+                           
+                                <label for="ShiftNurseNum">Nurses Number</label>                     
+                                <input type="text" class="form-control" id="ShiftNurseNum" placeholder="Nurse Number">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="ShiftAdminNum">Administrative staff Number</label>
+                                <input type="text" class="form-control" id="ShiftAdminNum" placeholder="Adminstative Number">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="ShiftDate" class="form-label">Shift Date</label>
+                                <input type="date" class="form-control" id="ShiftDate">
+                            
+                        </div>
+                         <button type="button" class="btn btn-success" onclick="">Submit</button>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    
+        <!-- Examination-->
+    
+    <div class="container" id="ShowExaminationCard" style="display: none">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        Create Examination
+                    </div>
+                    <div class="card-body" id="ShowPatientINFO">
+                       
+                            <div class="col-12 mb-3">
+                                <label for="ExaminationKind">Examination Type</label>
+                               <select id="ExaminationKind" class="form-select">
+                                <option selected>Choose...</option>
+                                <option>X-Ray</option>
+                                <option>Blood test</option>
+                                <option>Covid test</option>
+                                <option>Physical examination</option>
+                                
+                              </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="ExaminationDate" class="form-label">Examination Date</label>
+                                <input type="date" class="form-control" id="ExaminationDate">
+                            </div>
+                         <div class="col-12">
+                        <button type="button" class="btn btn-success" onclick="">Submit</button>
+              </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+     
+        <!-- Diagnosis card-->
+    
+    <div class="container" id="ShowDiagnosisCard" style="display: none">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card mt-5">
+                    <div class="card-header">
+                       Diagnosis Result
+                    </div>
+                    <div class="card-body" id="ShowPatientINFO">
+                       
+                            <div class="col-12 mb-3">
+                               
+                                <label class="form-label" id="DiagnosisResult"> </label>
+                            </div>
+                        <div>
+                            <label class="form-label" id="PrescribedMedicine"> </label>
+                        </div>
+                         <div class="col-12">
+                        
+              </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!--Personnel Modal -->
+    <div class="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="doctorModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="doctorModalLabel">Doctor Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="row g-3">
+              <div class="col-md-6">
+                <label for="doctorName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="doctorName">
+              </div>
+              <div class="col-md-6">
+                <label for="doctorSurname" class="form-label">Surname</label>
+                <input type="text" class="form-control" id="doctorSurname">
+              </div>
+              <div class="col-12">
+                <label for="doctorAddress" class="form-label">Address</label>
+                <input type="text" class="form-control" id="doctorAddress" placeholder="Dikaiosinis 15">
+              </div>
+              <div class="col-6">
+                <label for="doctorBirthday" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="doctorBirthday">
+              </div>
+              <div class="col-md-6">
+                <label for="doctorSex" class="form-label">Sex</label>
+                <select id="doctorSex" class="form-select">
+                  <option selected>Choose...</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+                 <div class="col-md-6">
+                <label for="PersonnelType" class="form-label">Type Of Personnel</label>
+                <select id="PersonnelType" class="form-select" onclick="showType();">
+                  <option selected>Choose...</option>
+                  <option>Doctor</option>
+                  <option>Nurse</option>
+                  <option>Administrative stuff</option>
+                </select>
+              </div>
+              <div id="ExtraInfoDiv" class="col-md-6" style="display: none">
+                <label for="ExtraPersonnelType" id="ExtraPersonnelTypeLabel" class="form-label"  ></label>
+                <input type="text" class="form-control" id="ExtraPersonnelType">
+              </div>
+              <div class="col-md-6">
+                <label for="doctorLicence" class="form-label">Licence Number (AT)</label>
+                <input type="text" class="form-control" id="doctorLicence">
+              </div>
+              <div class="col-md-6">
+                <label for="doctorCellphone" class="form-label">Cellphone Number</label>
+                <input type="text" class="form-control" id="doctorCellphone">
+              </div>
+              <div class="col-12">
+                <button type="button" onclick="registerPersonnel();" class="btn btn-success">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
@@ -246,8 +435,11 @@
     <script src="js/addSymptom.js" ></script>
     <script src="js/RegisterPatient.js" ></script>
     <script src="js/CheckPersonnelLogin.js" ></script>
-    
+    <script src="js/showTypeInfo.js" ></script>
+    <script src="js/RegisterPersonnel.js" ></script>
+    <script src="js/getExamined.js" ></script>
 
 </body>
 
 </html>
+

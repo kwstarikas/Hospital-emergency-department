@@ -17,6 +17,49 @@ import model.Patient;
  */
 public class PatientDB {
 
+    public static String getMedicine(String disease) {
+        String med = null;
+
+        if (disease.equals("Fracture")) {
+            med = new String("Lexotanil");
+        } else if (disease.equals("Migraine")) {
+            med = new String("Nurofen");
+        } else if (disease.equals("Gastrenteritida")) {
+            med = new String("Perfan");
+        } else if (disease.equals("Gastrenteritida")) {
+            med = new String("Imodium");
+        } else if (disease.equals("kardiaki aneparkeia")) {
+            med = new String("Perfan");
+        } else if (disease.equals("Covid")) {
+            med = new String("Covid Vacine");
+        }
+
+        return med;
+
+    }
+
+
+    public static String getDisease(String symptom) {
+
+        String disease = null;
+
+        if (symptom.equals("Wound")) {
+            disease = new String("Fracture");
+        } else if (symptom.equals("Headache")) {
+            disease = new String("Migraine");
+        } else if (symptom.equals("Stomachache")) {
+            disease = new String("Gastrenteritida");
+        } else if (symptom.equals("Abdominal pain ")) {
+            disease = new String("kardiaki aneparkeia");
+        } else if (symptom.equals("Weariness")) {
+            disease = new String("Covid");
+        }
+
+
+
+        return disease;
+    }
+
     public static Patient getPatient(int amka) throws ClassNotFoundException {
         System.out.print("INTO GET PATIENT");
         Patient patient = null;

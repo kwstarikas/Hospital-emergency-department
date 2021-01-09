@@ -24,19 +24,26 @@ function PersonnelLogin(){
                 document.getElementById("ShowPersonnelINFO").style.display = "none";
                 document.getElementById("PatientInfoLogin").style.display = "none";
                 
-                if (data.Type === 0)
+                if (data.Type === 0){
+                    document.getElementById("ShowExaminationCard").style.display = "block";
                     document.getElementById("ExtraInfo").innerHTML = 'Specialization';
-                else if (data.Type === 1)
-                    document.getElementById("ExtraInfo").innerHTML = 'Expertise'
-                else 
+                }
+                    
+                else if (data.Type === 1){
+                    document.getElementById("ExtraInfo").innerHTML = 'Expertise';
+                }
+                    
+                else {
+                    document.getElementById("ShowShiftCard").style.display = "block";
                     document.getElementById("ExtraInfo").innerHTML = 'Years of Service'
+                }
 
 
                 document.getElementById("Personnelname").innerHTML = data.First_Name;
                 document.getElementById("Personnelsurname").innerHTML = data.Last_Name;
                 document.getElementById("PersonnelAddress").innerHTML = data.Address;
                 document.getElementById("PersonnelBirthDate").innerHTML = data.Birthdate;
-                document.getElementById("PersonnelPID").innerHTML = data.PID;
+               
                 document.getElementById("Personnelcellphone").innerHTML = data.Phone;
                 document.getElementById("PersonelSex").innerHTML = data.Sex;
                 document.getElementById("PersonnelExtraInfo").innerHTML = data.Extra;
