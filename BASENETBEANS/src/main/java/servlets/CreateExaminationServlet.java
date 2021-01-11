@@ -14,8 +14,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -29,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author loukas
  */
-public class getExaminedServlet extends HttpServlet {
+public class CreateExaminationServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,71 +39,109 @@ public class getExaminedServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ClassNotFoundException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-
-            System.out.println("IN GET EXAMINDED SERVLET");
-
-            String symptom = request.getParameter("symptom");
-            String info = request.getParameter("amka");
+            String exType = request.getParameter("examType");
+            System.out.println("Exam type : " + exType);
+            System.out.println("IN Create EXAMINDED SERVLET");
+            Map map = new HashMap();
+            String info = request.getParameter("patient");
             int amka = Integer.parseInt(info);
-            info = request.getParameter("doctor");
-            int pid = Integer.parseInt(info);
+
+            String date = request.getParameter("date");
 
             Connection con = CS360DB.getConnection();
             Statement stmt = con.createStatement();
 
-//            String insQuery = new String("INSERT INTO `Examination` "
-//                    + "(`Examination_ID`, `Date`, `type`, `PID`) VALUES"
-//                    + " (NULL, '" + java.time.LocalDate.now() + "', 'X-RAY', '48')");
-//
-//            con.close();
-
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-
-            String disease = PatientDB.getDisease(symptom);
-
-            Date date = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
-            String insQuery = new String("INSERT INTO `Diagnosis` (`Diagnosis_ID`, `AMKA`, `Name`) "
-                    + "VALUES (NULL, '" + amka + "', '" + disease + "')");
-            stmt.executeUpdate(insQuery);
-            con.close();
-
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-
-            insQuery = new String("SELECT * FROM `Diagnosis` WHERE "
-                    + "`AMKA` = " + amka + " AND `Name` LIKE '" + disease + "'");
+            String insQuery = new String("SELECT * FROM `Nurse` WHERE "
+                    + "`Expertise` LIKE '" + exType + "'");
 
             ResultSet rs = stmt.executeQuery(insQuery);
 
-            int DiagnosisID = -1;
+            int pid = -1;
             if (rs.next()) {
-                DiagnosisID = rs.getInt("Diagnosis_ID");
-                System.out.println("VRIKA TO DIAGNOISIS ID :" + DiagnosisID);
+                pid = rs.getInt("PID");
             }
 
             con.close();
 
-//            con = CS360DB.getConnection();
-//            stmt = con.createStatement();
-//
-//            insQuery = new String("INSERT INTO `Disease` (`Diagnosis_ID`, `Disease`) "
-//                    + "VALUES ('" + DiagnosisID + "', '" + disease + "')");
-//            stmt.executeUpdate(insQuery);
-//            con.close();
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
 
-            String medicine = PatientDB.getMedicine(disease);
+            insQuery = new String("INSERT INTO `Examination` "
+                    + "(`Examination_ID`, `Date`, `type`, `PID`) "
+                    + "VALUES (NULL, '" + date + "', '" + exType + "', '" + pid + "')");
+
+            int exID = stmt.executeUpdate(insQuery, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs1 = stmt.getGeneratedKeys();
+            int lastExam = 0;
+            if (rs1.next()) {
+                lastExam = rs1.getInt(exID);
+
+            }
+
+            System.out.println("EXAMINATION INSERTED with log : " + lastExam);
+            con.close();
 
             con = CS360DB.getConnection();
             stmt = con.createStatement();
+
+            insQuery = new String("SELECT * FROM `Examination`"
+                    + " WHERE `Examination_ID` = " + lastExam + " ");
+
+            rs = stmt.executeQuery(insQuery);
+
+            if (rs.next()) {
+                map.put("ExamID", rs.getInt("Examination_ID"));
+                map.put("NursePID", rs.getInt("PID"));
+                map.put("ExamDate", date);
+            }
+            con.close();
+
+            // pame na vroume disease
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
+            insQuery = new String("SELECT * FROM `Symptoms` WHERE `AMKA` = " + amka + " ");
+
+            String symptom = "";
+            rs = stmt.executeQuery(insQuery);
+            while (rs.next()) {
+                symptom = new String(rs.getString("Symptoms"));
+                System.out.println(" VRIKA TO SYMPTOMA : " + rs.getString("Symptoms"));
+            }
+            System.out.println(" AT LAST !!!! VRIKA TO SYMPTOMA (kai kala "
+                    + "to teleutaio p egine insert) : " + symptom);
+
+            con.close();
+
+            String disease = PatientDB.getDisease(symptom);
+
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
+
+            insQuery = new String("INSERT INTO `Diagnosis` "
+                    + "(`Diagnosis_ID`, `AMKA`, `Name`, `Examination_ID`) VALUES "
+                    + "(NULL, '" + amka + "', '" + disease + "', '" + lastExam + "')");
+
+            int d = stmt.executeUpdate(insQuery, Statement.RETURN_GENERATED_KEYS);
+
+            rs1 = stmt.getGeneratedKeys();
+            int DiagnosisID = 0;
+            if (rs1.next()) {
+                DiagnosisID = rs1.getInt(d);
+
+            }
+            con.close();
+
+            //////////////////////////////////////
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
+
+            String medicine = PatientDB.getMedicine(disease);
 
             insQuery = new String("SELECT Code FROM `Medicine` "
                     + "WHERE `Name` LIKE '" + medicine + "' ORDER BY `Name` DESC");
@@ -129,25 +165,12 @@ public class getExaminedServlet extends HttpServlet {
 
             con.close();
 
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-
-            insQuery = new String("INSERT INTO `Previous visit` "
-                    + "(`AMKA`, `ExaminationID`, `Date`, `Diagnosis`, `Examination`, `Cure`) "
-                    + "VALUES "
-                    + "('" + amka + "', '" + amka + "', '" + amka + "', '" + amka + "', "
-                    + "'" + amka + "', '" + amka + "')");
-
-            Map map = new HashMap();
-
-            map.put("MED", true);
-            map.put("Disease", disease);
             map.put("Medicine", medicine);
+            map.put("Disease", disease);
 
             Gson gson = new Gson();
             String json = gson.toJson(map);
             response.getWriter().write(json);
-
 
         }
     }
@@ -166,10 +189,10 @@ public class getExaminedServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(getExaminedServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(getExaminedServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateExaminationServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateExaminationServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -186,10 +209,10 @@ public class getExaminedServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(getExaminedServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(getExaminedServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateExaminationServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateExaminationServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -43,7 +43,7 @@ function registerPatient(){
             document.getElementById("Patientcellphone").innerHTML = data.Phone;
             document.getElementById("PatientchronicDiseaseDD").innerHTML = data.ChronicDate;
             document.getElementById("PatientchronicDisease").innerHTML = data.Chronic;
-             document.getElementById("DoctorToSee").innerHTML = '-';
+            document.getElementById("DoctorToSee").innerHTML = '-';
            
         },
         error: {

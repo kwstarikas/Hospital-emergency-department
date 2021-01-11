@@ -9,7 +9,8 @@ function getExamined(){
     console.log("in Get Examined");
     var data = {
        symptom : $('#patientSymptom').val(), 
-       amka :  $('#amka_input').val()
+       amka :  $('#amka_input').val(),
+       doctor : $('#DoctorToSee').val()
     };
     
       $.ajax({
@@ -31,3 +32,4 @@ function getExamined(){
         }
     });
 }
+

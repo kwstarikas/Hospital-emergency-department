@@ -6,12 +6,11 @@
 package servlets;
 
 import com.google.gson.Gson;
-import db.AddPeople;
 import db.CS360DB;
-import db.PatientDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author loukas
  */
-public class AddSymptomServlet extends HttpServlet {
+public class FetchPatientServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,40 +41,28 @@ public class AddSymptomServlet extends HttpServlet {
             throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            System.out.println("IN ADD SYMPTOM SERVLET");
+
+            System.out.println("IN FETCH PATIENT SERVLET");
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-
-            boolean correct = false; //if the patient exists
-
             Connection con = CS360DB.getConnection();
             Statement stmt = con.createStatement();
+            String info = request.getParameter("pid");
 
-            String symptom = request.getParameter("symptom");
-            String info = request.getParameter("amka");
-            int amka = Integer.parseInt(info);
-
-            String insQuery = new String("INSERT INTO `Symptoms` "
-                    + "(`AMKA`, `Symptoms`) "
-                    + "VALUES ('" + amka + "', '" + symptom + "')");
-
-            stmt.executeUpdate(insQuery);
-
-            con.close();
+            int pid = Integer.parseInt(info);
             Map map = new HashMap();
 
-            int pid = PatientDB.getDoctor(symptom);
+            String insQuery = new String("SELECT * FROM `Patient` "
+                    + "WHERE `PID` = " + pid + "");
+            ResultSet rs = stmt.executeQuery(insQuery);
 
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-            insQuery = new String("UPDATE `Patient` SET "
-                    + "`PID` = '" + pid + "' WHERE `Patient`.`AMKA` = " + amka + " ;");
-            stmt.executeUpdate(insQuery);
-
+            int i = 0;
+            while (rs.next()) {
+                map.put("Patient" + i, rs.getInt("AMKA"));
+                i++;
+            }
             con.close();
-            map.put("DOC", AddPeople.addSymptoms(amka, symptom));
-
 
             Gson gson = new Gson();
             String json = gson.toJson(map);
@@ -99,9 +86,9 @@ public class AddSymptomServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FetchPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FetchPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -119,9 +106,9 @@ public class AddSymptomServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FetchPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FetchPatientServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

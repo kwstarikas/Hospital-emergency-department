@@ -28,6 +28,14 @@
         <servlet-name>getExaminedServlet</servlet-name>
         <servlet-class>servlets.getExaminedServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FetchPatientServlet</servlet-name>
+        <servlet-class>servlets.FetchPatientServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateExaminationServlet</servlet-name>
+        <servlet-class>servlets.CreateExaminationServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginPatientServlet</servlet-name>
         <url-pattern>/LoginPatientServlet</url-pattern>
@@ -55,6 +63,14 @@
     <servlet-mapping>
         <servlet-name>getExaminedServlet</servlet-name>
         <url-pattern>/getExaminedServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FetchPatientServlet</servlet-name>
+        <url-pattern>/FetchPatientServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateExaminationServlet</servlet-name>
+        <url-pattern>/CreateExaminationServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

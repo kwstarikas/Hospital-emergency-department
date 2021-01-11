@@ -46,7 +46,7 @@
                     <div class="card-body">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="pid_input" placeholder="amka">
-                            <label for="amka_input">PID</label>
+                            <label for="pid_input">PID</label>
                         </div>
                         <button type="button" onclick="PersonnelLogin();" class="btn btn-success">Enter</button>
                          <button id="btnGroupDrop1" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#doctorModal">
@@ -112,6 +112,7 @@
                                 <ul class="list-group">
                                     <li class="list-group-item list-group-item-primary">Name</li>
                                     <li class="list-group-item list-group-item-primary">Surname</li>
+                                    <li class="list-group-item list-group-item-primary">PID</li>
                                     <li class="list-group-item list-group-item-primary">Address</li>
                                     <li class="list-group-item list-group-item-primary">Birthdate</li>
                                     <li class="list-group-item list-group-item-primary">Tel Number</li>
@@ -123,6 +124,7 @@
                                 <ul class="list-group">
                                   <li class="list-group-item" id="Personnelname"></li>
                                   <li class="list-group-item" id="Personnelsurname"></li>
+                                  <li class="list-group-item" id="PersonnelPID"></li>
                                   <li class="list-group-item" id="PersonnelAddress"></li>
                                   <li class="list-group-item" id="PersonnelBirthDate"></li>
                                   
@@ -178,15 +180,15 @@
                   <option>Wound</option>
                   <option>Headache</option>
                   <option>Stomachache</option>
-                  <option>Abdominal pain </option>
+                  <option>Abdominal pain</option>
                   <option>Weariness</option>
                 </select>
                 <button type="button" class="btn btn-success" onclick="addSymptom();">Submit</button>
               </div>
-    <div >
+<!--    <div >
         <button id="ShowExaminationButton" style="display: none"  type="button" onclick="getExamined();" class="btn btn-success" >EXAMINE ME</button>
         
-    </div>
+    </div>-->
     <!-- patiert Modal -->
     <div class="modal fade" id="patientModal" tabindex="-1" aria-labelledby="patientModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -291,7 +293,10 @@
                         Create Examination
                     </div>
                     <div class="card-body" id="ShowPatientINFO">
-                       
+                       <div class="col-12 mb-3" id="FetchPatientDiv">
+                           <button type="button" onclick="fetchPatients();">Fetch Patients</button>
+                           
+                            </div>
                             <div class="col-12 mb-3">
                                 <label for="ExaminationKind">Examination Type</label>
                                <select id="ExaminationKind" class="form-select">
@@ -308,7 +313,7 @@
                                 <input type="date" class="form-control" id="ExaminationDate">
                             </div>
                          <div class="col-12">
-                        <button type="button" class="btn btn-success" onclick="">Submit</button>
+                        <button type="button" class="btn btn-success" onclick="createExamination();">Submit</button>
               </div>
                         
                     </div>
@@ -438,6 +443,8 @@
     <script src="js/showTypeInfo.js" ></script>
     <script src="js/RegisterPersonnel.js" ></script>
     <script src="js/getExamined.js" ></script>
+    <script src="js/CreateExamination.js" ></script>
+    <script src="js/FetchPatients.js" ></script>
 
 </body>
 

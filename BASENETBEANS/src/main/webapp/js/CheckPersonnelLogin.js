@@ -25,8 +25,10 @@ function PersonnelLogin(){
                 document.getElementById("PatientInfoLogin").style.display = "none";
                 
                 if (data.Type === 0){
+                    console.log("IS DOCTOR");
                     document.getElementById("ShowExaminationCard").style.display = "block";
                     document.getElementById("ExtraInfo").innerHTML = 'Specialization';
+                    
                 }
                     
                 else if (data.Type === 1){
@@ -43,10 +45,12 @@ function PersonnelLogin(){
                 document.getElementById("Personnelsurname").innerHTML = data.Last_Name;
                 document.getElementById("PersonnelAddress").innerHTML = data.Address;
                 document.getElementById("PersonnelBirthDate").innerHTML = data.Birthdate;
-               
+                document.getElementById("PersonnelPID").innerHTML = data.PID;
                 document.getElementById("Personnelcellphone").innerHTML = data.Phone;
                 document.getElementById("PersonelSex").innerHTML = data.Sex;
                 document.getElementById("PersonnelExtraInfo").innerHTML = data.Extra;
+                
+            
             }
                 
 
@@ -58,4 +62,31 @@ function PersonnelLogin(){
         }
     });
 
+}
+
+function fetchPatients(){
+    
+    var data = {
+        pid  : $('#pid_input')
+    };
+    console.log("In Fetch Patient" + data.pid);
+    
+//    $.ajax({
+//        type: "POST",
+//        url: "FetchPatientServlet",
+//        data: data,
+//        async: true,
+//        success: function(data) {
+//            console.log("Fetch patient"); 
+//            conslole.log(data);
+//            
+//               
+//        },
+//        error: {
+//            400: function(data) {
+//                console.log("Error invalid AMKA");
+//            }
+//        }
+//    });
+    
 }

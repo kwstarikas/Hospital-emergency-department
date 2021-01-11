@@ -38,25 +38,61 @@ public class PatientDB {
 
     }
 
+    public static int fetchdoc(String spec) throws SQLException, ClassNotFoundException {
+        int pid = 0;
+
+        Connection con = CS360DB.getConnection();
+        Statement stmt = con.createStatement();
+
+        String insQuery = new String("SELECT * FROM `Doctor` WHERE `Specialization` "
+                + "LIKE '" + spec + "' ORDER BY `Specialization` DESC");
+
+        ResultSet rs = stmt.executeQuery(insQuery);
+
+        if (rs.next()) {
+            pid = rs.getInt("PID");
+        }
+        System.out.println("FETCH DONE WITH PID : " + pid);
+        return pid;
+    }
+
+    public static int getDoctor(String symptom) throws SQLException, ClassNotFoundException {
+        int pid = 0;
+        System.out.print("in Get Doc");
+
+        if (symptom.equals("Wound")) {
+            pid = fetchdoc("arthrologos");
+        } else if (symptom.equals("Headache")) {
+            pid = fetchdoc("pathologos");
+        } else if (symptom.equals("Stomachache")) {
+            pid = fetchdoc("pneumatologos");
+        } else if (symptom.equals("Abdominal pain ")) {
+            pid = fetchdoc("kardiologos");
+        } else if (symptom.equals("Weariness")) {
+            pid = fetchdoc("covid");
+        }
+
+        return pid;
+    }
 
     public static String getDisease(String symptom) {
 
         String disease = null;
-
+        System.out.println("START GOT DISEASE : " + disease);
         if (symptom.equals("Wound")) {
             disease = new String("Fracture");
         } else if (symptom.equals("Headache")) {
             disease = new String("Migraine");
         } else if (symptom.equals("Stomachache")) {
             disease = new String("Gastrenteritida");
-        } else if (symptom.equals("Abdominal pain ")) {
+        } else if (symptom.equals("Abdominal pain")) {
             disease = new String("kardiaki aneparkeia");
         } else if (symptom.equals("Weariness")) {
             disease = new String("Covid");
         }
 
 
-
+        System.out.println("END GOT DISEASE : " + disease);
         return disease;
     }
 
@@ -143,4 +179,5 @@ public class PatientDB {
             }
         }
     }
+
 }

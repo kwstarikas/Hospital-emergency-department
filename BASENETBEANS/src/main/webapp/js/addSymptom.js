@@ -19,7 +19,7 @@ function addSymptom(){
         success: function(data) {
             console.log("Symptom added");
             document.getElementById("DoctorToSee").innerHTML = data.DOC;
-            document.getElementById("ShowExaminationButton").style.display = "block";
+           // document.getElementById("ShowExaminationButton").style.display = "block";
                
         },
         error: {
