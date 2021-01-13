@@ -29,6 +29,27 @@ public class AddMed {
 
     }
 
+    public static void addPeople(String[] dude, int shift, String date) throws SQLException, ClassNotFoundException {
+        Statement stmt = null;
+        Connection con = null;
+
+        String insQuery = new String();
+
+        for (int i = 0; i < dude.length; i++) {
+            con = CS360DB.getConnection();
+            stmt = con.createStatement();
+
+            insQuery = "INSERT INTO `OnShift` (`ID`, `PPID`, `Date`) "
+                    + "VALUES ('" + shift + "', '" + dude[i] + "', '" + date + "')";
+
+            stmt.executeUpdate(insQuery);
+            con.close();
+
+        }
+
+        System.out.print("INSERT ARRAY INTO SHIFT");
+    }
+
     public static void addChronicDisease(int amka, String Date, String name)
             throws ClassNotFoundException, SQLException {
 

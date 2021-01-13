@@ -69,6 +69,10 @@ public class CreateExaminationServlet extends HttpServlet {
 
             con.close();
 
+            map.put("EXAMTYPE", exType);
+            map.put("AMKA", amka);
+            map.put("DATE", date);
+
             con = CS360DB.getConnection();
             stmt = con.createStatement();
 
@@ -79,11 +83,13 @@ public class CreateExaminationServlet extends HttpServlet {
             int exID = stmt.executeUpdate(insQuery, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs1 = stmt.getGeneratedKeys();
             int lastExam = 0;
+
             if (rs1.next()) {
                 lastExam = rs1.getInt(exID);
 
             }
 
+            map.put("EXAMINATIONID", lastExam);
             System.out.println("EXAMINATION INSERTED with log : " + lastExam);
             con.close();
 

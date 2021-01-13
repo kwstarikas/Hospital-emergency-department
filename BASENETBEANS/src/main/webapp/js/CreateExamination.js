@@ -29,10 +29,26 @@ function createExamination(){
         data: data,
         async: true,
         success: function(data) {
+            console.log(data);
             console.log("Create eXAMINATION FINE "); 
             document.getElementById("ShowDiagnosisCard").style.display = "block";
-             document.getElementById("DiagnosisResult").innerHTML = data.Disease;
-              document.getElementById("PrescribedMedicine").innerHTML = data.Medicine;
+            //to print
+            document.getElementById("DiagnosisResult").innerHTML = data.Disease;
+            document.getElementById("DiagnosisResult").value = data.Disease;
+            document.getElementById("PrescribedMedicine").innerHTML = data.Medicine;
+            document.getElementById("PrescribedMedicine").value = data.Medicine;
+          
+            //to add 
+            document.getElementById("ExaminationAMKA").innerHTML = data.AMKA;
+             document.getElementById("ExaminationAMKA").value = data.AMKA;
+            document.getElementById("ExaminationDate").innerHTML = data.DATE;
+             document.getElementById("ExaminationDate").value = data.DATE;
+            document.getElementById("ExaminationType").innerHTML = data.EXAMTYPE;
+             document.getElementById("ExaminationType").value = data.EXAMTYPE;
+            document.getElementById("ExaminationID").innerHTML = data.ExamID;
+             document.getElementById("ExaminationID").value = data.ExamID;
+            console.log("TO DATE EINAI " + document.getElementById("ExaminationID").value);
+            
             
         },
         error: {
