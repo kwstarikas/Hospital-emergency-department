@@ -66,7 +66,7 @@ public class PatientDB {
             pid = fetchdoc("pathologos");
         } else if (symptom.equals("Stomachache")) {
             pid = fetchdoc("pneumatologos");
-        } else if (symptom.equals("Abdominal pain ")) {
+        } else if (symptom.equals("Abdominal pain")) {
             pid = fetchdoc("kardiologos");
         } else if (symptom.equals("Weariness")) {
             pid = fetchdoc("covid");

@@ -6,17 +6,14 @@
 package servlets;
 
 import com.google.gson.Gson;
-import db.AddPeople;
 import db.CS360DB;
-import db.PatientDB;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -30,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author loukas
  */
-public class AddSymptomServlet extends HttpServlet {
+public class SubmitAbstractQueryServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,70 +42,38 @@ public class AddSymptomServlet extends HttpServlet {
             throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            System.out.println("IN ADD SYMPTOM SERVLET");
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
-            boolean correct = false; //if the patient exists
+            Map map = new HashMap();
 
             Connection con = CS360DB.getConnection();
             Statement stmt = con.createStatement();
 
-            String symptom = request.getParameter("symptom");
-            String info = request.getParameter("amka");
-            int amka = Integer.parseInt(info);
+            String insQuery = request.getParameter("query");
 
-            String insQuery = new String("INSERT INTO `Symptoms` "
-                    + "(`AMKA`, `Symptoms`) "
-                    + "VALUES ('" + amka + "', '" + symptom + "')");
-
-            stmt.executeUpdate(insQuery);
-
-            con.close();
-            Map map = new HashMap();
-
-            int pid = PatientDB.getDoctor(symptom);
-
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-
-            insQuery = new String("UPDATE `Patient` SET "
-                    + "`PID` = '" + pid + "' WHERE `Patient`.`AMKA` = " + amka + " ;");
-            stmt.executeUpdate(insQuery);
-
-            con.close();
-            map.put("DOC", AddPeople.addSymptoms(amka, symptom));
-
-            //ADD TO SHIFT/////////////////////
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDateTime now = LocalDateTime.now();
-            System.out.println(dtf.format(now));
-
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-
-            insQuery = new String("SELECT * FROM `Shift` "
-                    + "WHERE `Date` = '" + dtf.format(now) + "'");
             ResultSet rs = stmt.executeQuery(insQuery);
-            int ShiftID = 0;
-            if (rs.next()) {
-                ShiftID = rs.getInt("Shift_ID");
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int j = 0;
+            String responseSet = "";
+
+            while (rs.next()) {
+
+                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                    //map("HELLO", rs.getString(i));
+                    responseSet += " " + rs.getString(i) + " ";
+
+                    System.out.println("in for with value : " + rs.getString(i));
+                }
+
+                map.put(j, responseSet);
+                responseSet = "";
+                j++;
             }
+
             con.close();
-
-            con = CS360DB.getConnection();
-            stmt = con.createStatement();
-
-            if (ShiftID > 0) {
-                insQuery = new String("INSERT INTO `OnShift` (`ID`, `PPID`, `Date`) "
-                        + "VALUES ('" + ShiftID + "', '" + amka + "', '" + dtf.format(now) + "')");
-                stmt.executeUpdate(insQuery);
-                con.close();
-            } else
-                System.out.print("INVALID DATE");
-
-            ///////////////////////////////////
 
             Gson gson = new Gson();
             String json = gson.toJson(map);
@@ -132,9 +97,9 @@ public class AddSymptomServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmitAbstractQueryServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmitAbstractQueryServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -152,9 +117,9 @@ public class AddSymptomServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmitAbstractQueryServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AddSymptomServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SubmitAbstractQueryServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -44,6 +44,10 @@
         <servlet-name>FetchDocServlet</servlet-name>
         <servlet-class>servlets.FetchDocServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SubmitAbstractQueryServlet</servlet-name>
+        <servlet-class>servlets.SubmitAbstractQueryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginPatientServlet</servlet-name>
         <url-pattern>/LoginPatientServlet</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>FetchDocServlet</servlet-name>
         <url-pattern>/FetchDocServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitAbstractQueryServlet</servlet-name>
+        <url-pattern>/SubmitAbstractQueryServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
